@@ -2,7 +2,7 @@
 
 You can use [nodemon](http://nodemon.io) for running:
 
-	nodemon index.coffee
+	nodemon
 
 Just install it using NPM:
 
