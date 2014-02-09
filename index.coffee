@@ -1,14 +1,18 @@
 express = require 'express'
+partials = require 'express-partials'
 path = require 'path'
 
 app = express()
 
 homeCtrl = require './controllers/home'
 
-app.set 'port', process.env.PORT || 1337
-app.set 'views', path.join __dirname, 'views'
+app.set 'port', process.env.PORT or 1337
+app.set 'views', 'views'
 app.set 'view engine', 'ejs'
-app.use express.static path.join __dirname, 'public'
+
+app.use partials()
+app.use express.compress()
+app.use '/public', express.static 'public'
 
 # dummy GET request
 app.get '/', homeCtrl.index
