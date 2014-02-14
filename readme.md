@@ -1,9 +1,9 @@
 # Server boilerplate
 
-You can use [nodemon](http://nodemon.io) for running:
+You can use [nodemon](http://nodemon.io) or [coffee](http://coffeescript.org/#usage) command for running via Bash
 
 	nodemon
 
-Just install it using NPM:
+or
 
-	npm install -g nodemon
+	coffee index.coffee
