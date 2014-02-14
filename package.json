@@ -4,7 +4,7 @@
   "description": "Server structure",
   "main": "index.coffee",
   "scripts": {
-    "start": "nodemon",
+    "start": "(nodemon || coffee index.coffee)",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Alexey Raspopov (https://github.com/alexeyraspopov)",
