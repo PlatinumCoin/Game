@@ -1,6 +1,5 @@
 express = require 'express'
 partials = require 'express-partials'
-path = require 'path'
 app = express()
 
 # controllers
