@@ -19,6 +19,7 @@
   ],
   "dependencies": {
     "normalize-css": "~3.0.1",
-    "socket.io-client": "~0.9.16"
+    "socket.io-client": "~0.9.16",
+    "raf.js": "~0.0.3"
   }
 }
