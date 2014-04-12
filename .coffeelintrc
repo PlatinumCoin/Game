@@ -1,0 +1,15 @@
+{
+	"arrow_spacing": {
+		"level": "error"
+	},
+	"cyclomatic_complexity": {
+		"value": 3,
+		"level": "warn"
+	},
+	"indentation": {
+		"level": "ignore"
+	},
+	"no_tabs": {
+		"level": "ignore"
+	}
+}

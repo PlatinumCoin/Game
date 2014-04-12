@@ -12,7 +12,7 @@ gulp.task 'clean', () ->
 
 gulp.task 'coffee-lint', () ->
 	gulp.src source
-		.pipe coffeelint()
+		.pipe coffeelint('.coffeelintrc')
 		.pipe coffeelint.reporter()
 
 gulp.task 'coffee-build', () ->
