@@ -11,7 +11,7 @@ gulp.task 'clean', () ->
 		.pipe clean()
 
 gulp.task 'coffee-lint', () ->
-	gulp.src source
+	gulp.src [source, '*.coffee']
 		.pipe coffeelint('.coffeelintrc')
 		.pipe coffeelint.reporter()
 
