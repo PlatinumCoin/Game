@@ -9,7 +9,7 @@
 	<tbody>
 		<% games.forEach(function(game){ %>
 		<tr>
-			<td><a href="game/#<%= game.hash %>"><%= game.name %></a></td>
+			<td><a href="game/<%= game.hash %>"><%= game.name %></a></td>
 			<td><%= game.players %> / <%= game.max %></td>
 		</tr>
 		<% }); %>
