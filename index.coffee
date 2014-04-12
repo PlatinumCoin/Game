@@ -2,6 +2,7 @@ express = require 'express'
 partials = require 'express-partials'
 socket = require 'socket.io'
 http = require 'http'
+uuid = require 'node-uuid'
 
 # create servers instances
 app = express()
@@ -30,3 +31,15 @@ app.listen app.get('port'), () ->
 
 # server listen neighbour port
 server.listen app.get('port') + 1
+
+# socket connection options
+io.sockets.on 'connection', (client) ->
+	client.id = uuid.v1()
+
+	client.emit 'onconnected', id: client.id
+
+	client.on 'message', (message) ->
+		console.log client.id, message
+
+	client.on 'disconnect', () ->
+		console.log client.id
