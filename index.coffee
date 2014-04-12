@@ -34,12 +34,12 @@ server.listen app.get('port') + 1
 
 # socket connection options
 io.sockets.on 'connection', (client) ->
-	client.id = uuid.v1()
+	client.uuid = uuid.v1()
 
-	client.emit 'onconnected', id: client.id
+	client.emit 'onconnected', id: client.uuid
 
 	client.on 'message', (message) ->
-		console.log client.id, message
+		console.log client.uuid, message
 
 	client.on 'disconnect', () ->
-		console.log client.id
+		console.log client.uuid
