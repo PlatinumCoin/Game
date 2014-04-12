@@ -17,5 +17,11 @@
     "express": "~3.4.8",
     "ejs": "~0.8.5",
     "express-partials": "~0.2.0"
+  },
+  "devDependencies": {
+    "gulp-coffee": "^1.4.1",
+    "gulp": "^3.6.0",
+    "gulp-coffeelint": "^0.3.2",
+    "coffee-script": "^1.7.1"
   }
 }

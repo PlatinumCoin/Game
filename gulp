@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# small hack for use gulp with CoffeeScript
+exec node_modules/gulp/bin/gulp.js --require coffee-script/register $*
