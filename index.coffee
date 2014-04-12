@@ -5,7 +5,7 @@ http = require 'http'
 
 # create servers instances
 app = express()
-server = http.createServer(app)
+server = http.createServer app
 io = socket.listen server
 
 # controllers
@@ -30,6 +30,3 @@ app.listen app.get('port'), () ->
 
 # server listen neighbour port
 server.listen app.get('port') + 1
-
-
-# io.sockets.on 'connection', (socket) -> console.log socket
