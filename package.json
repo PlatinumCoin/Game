@@ -22,6 +22,7 @@
     "gulp-coffee": "^1.4.1",
     "gulp": "^3.6.0",
     "gulp-coffeelint": "^0.3.2",
-    "coffee-script": "^1.7.1"
+    "coffee-script": "^1.7.1",
+    "gulp-clean": "^0.2.4"
   }
 }
