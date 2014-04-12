@@ -1,0 +1,17 @@
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Players</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		<% games.forEach(function(game){ %>
+		<tr>
+			<td><a href="game/#<%= game.hash %>"><%= game.name %></a></td>
+			<td><%= game.players %> / <%= game.max %></td>
+		</tr>
+		<% }); %>
+	</tbody>
+</table>
