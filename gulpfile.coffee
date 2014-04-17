@@ -3,7 +3,7 @@ clean = require 'gulp-clean'
 coffee = require 'gulp-coffee'
 coffeelint = require 'gulp-coffeelint'
 
-source = 'public/scripts/*.coffee'
+source = 'scripts/*.coffee'
 destination = 'public/build'
 
 gulp.task 'clean', () ->
