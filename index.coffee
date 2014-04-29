@@ -12,6 +12,7 @@ io = socket.listen server
 # controllers
 homeCtrl = require './controllers/home'
 lobbyCtrl = require './controllers/lobby'
+gameCtrl = require './controllers/game'
 
 # express configuration
 app.set 'port', process.env.PORT or 1337
@@ -26,6 +27,7 @@ app.use '/public', express.static 'public'
 # dummy GET request
 app.get '/', homeCtrl.index
 app.get '/lobby', lobbyCtrl.index
+app.get '/game', gameCtrl.index
 
 # start express server
 app.listen app.get('port'), () ->
