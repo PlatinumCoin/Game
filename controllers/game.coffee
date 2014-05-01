@@ -1,2 +1,5 @@
 exports.index = (request, response) ->
-	response.render 'game', title: 'Hello, world!'
+	if not request.params.gameId
+		response.redirect 301, '/lobby'
+
+	response.render 'game', title: request.params.gameId

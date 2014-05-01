@@ -27,7 +27,7 @@ app.use '/public', express.static 'public'
 # dummy GET request
 app.get '/', homeCtrl.index
 app.get '/lobby', lobbyCtrl.index
-app.get '/game', gameCtrl.index
+app.get '/game/:gameId?', gameCtrl.index
 
 # start express server
 app.listen app.get('port'), () ->
