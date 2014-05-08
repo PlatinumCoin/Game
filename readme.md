@@ -1,4 +1,6 @@
-# The Game
+# Hollow Point
+
+Awesome platformer.
 
 ## Development
 
