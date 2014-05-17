@@ -40,10 +40,15 @@ server.listen app.get('port') + 1
 io.sockets.on 'connection', (client) ->
 	client.uuid = uuid.v1()
 
-	client.emit 'onconnected', id: client.uuid
+	client.emit 'connected', id: client.uuid
 
 	client.on 'message', (message) ->
-		console.log client.uuid, message
+		console.log message
+		client.broadcast.emit 'tick', { message, id: client.uuid }
+
+	client.on 'connectTo', (gameId) ->
+		client.join 'gameId'
+		console.log "client join #{ gameId }"
 
 	client.on 'disconnect', () ->
 		console.log client.uuid
