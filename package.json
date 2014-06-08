@@ -1,7 +1,7 @@
 {
-  "name": "server",
+  "name": "hollow-point",
   "version": "0.0.0",
-  "description": "Server structure",
+  "description": "Awesome platformer",
   "main": "index.coffee",
   "scripts": {
     "start": "(nodemon || coffee index.coffee)",
@@ -10,7 +10,7 @@
   "author": "Alexey Raspopov (https://github.com/alexeyraspopov)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/PlatinumCoin/Server.git"
+    "url": "https://github.com/platinumcoin/hollow-point.git"
   },
   "license": "MIT",
   "dependencies": {
