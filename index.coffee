@@ -27,7 +27,7 @@ app.get '/lobby', lobbyCtrl.index
 app.get '/game/:gameId?', gameCtrl.index
 
 # servers running
-app.listen ports.express, () -> console.log "Server listening on port #{ ports.express }"
+app.listen ports.express, () -> console.log 'info: server started'
 server.listen ports.sockets
 
 # socket connection options
