@@ -1,0 +1,13 @@
+extends layout
+
+block content
+	table
+		thead
+			tr
+				th Name
+				th Players
+		tbody
+			for game in games
+				tr
+					td: a(href="game/#{game.hash}")= game.name
+					td= game.players + '/' + game.max

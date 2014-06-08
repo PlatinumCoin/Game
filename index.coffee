@@ -16,11 +16,9 @@ gameCtrl = require './controllers/game'
 
 # express configuration
 app.set 'port', process.env.PORT or 1337
-app.set 'views', 'views'
-app.set 'view engine', 'ejs'
+app.set 'view engine', 'jade'
 
 # express middlewares
-app.use partials()
 app.use express.compress()
 app.use '/public', express.static 'public'
 

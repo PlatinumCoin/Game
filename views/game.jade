@@ -1,0 +1,10 @@
+extends layout
+
+block content
+	h1= title
+
+	button(id="bump") Bump Me
+
+	script!= 'GAME_ID = \'' + title + '\';'
+	script(src="/public/bower_components/socket.io-client/dist/socket.io.js")
+	script(src="/public/build/client-connection.js")
