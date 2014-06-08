@@ -1,38 +1,34 @@
 express = require 'express'
-partials = require 'express-partials'
 socket = require 'socket.io'
-http = require 'http'
+ports = require './ports'
 uuid = require 'node-uuid'
+http = require 'http'
 
 # create servers instances
 app = express()
 server = http.createServer app
 io = socket.listen server
 
-# controllers
-homeCtrl = require './controllers/home'
-lobbyCtrl = require './controllers/lobby'
-gameCtrl = require './controllers/game'
-
 # express configuration
-app.set 'port', process.env.PORT or 1337
 app.set 'view engine', 'jade'
 
 # express middlewares
 app.use express.compress()
 app.use '/public', express.static 'public'
 
-# dummy GET request
+# controllers
+homeCtrl = require './controllers/home'
+lobbyCtrl = require './controllers/lobby'
+gameCtrl = require './controllers/game'
+
+# getters
 app.get '/', homeCtrl.index
 app.get '/lobby', lobbyCtrl.index
 app.get '/game/:gameId?', gameCtrl.index
 
-# start express server
-app.listen app.get('port'), () ->
-	console.log 'Server listening on port %d', app.get('port')
-
-# server listen neighbour port
-server.listen app.get('port') + 1
+# servers running
+app.listen ports.express, () -> console.log "Server listening on port #{ ports.express }"
+server.listen ports.sockets
 
 # socket connection options
 io.sockets.on 'connection', (client) ->
