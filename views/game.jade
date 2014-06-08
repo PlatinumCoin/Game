@@ -8,7 +8,8 @@ block content
 	script!= 'GAME_ID = \'' + title + '\';'
 	script.
 		var socket = io.connect('http://localhost:8080');
-		console.log(socket);
+
+		socket.emit('request:join', GAME_ID);
 
 		var player = {
 				coords: { x: 0, y: 0 },
@@ -21,7 +22,7 @@ block content
 			this.coords.y += 5 * this.move.y;
 
 			if(this.move.x || this.move.y){
-				socket.emit('message', player.coords);
+				socket.emit('request:update', player.coords);
 			}
 		};
 
@@ -90,10 +91,10 @@ block content
 
 		socket.on('newClient', function(id){
 			createEnemy(id);
-			socket.emit('message', player.coords);
+			socket.emit('request:update', player.coords);
 		});
 
-		socket.on('sync', function(ids){
+		socket.on('request:sync', function(ids){
 			ids.forEach(createEnemy);
 		});
 
