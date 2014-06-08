@@ -6,11 +6,8 @@ block content
 
 	script(src="/public/bower_components/socket.io-client/dist/socket.io.js")
 	script!= 'GAME_ID = \'' + title + '\';'
+	script(src="/public/build/client-connection.js")
 	script.
-		var socket = io.connect('http://localhost:8080');
-
-		socket.emit('request:join', GAME_ID);
-
 		var player = {
 				coords: { x: 0, y: 0 },
 				color: '#ff0000',
@@ -22,7 +19,7 @@ block content
 			this.coords.y += 5 * this.move.y;
 
 			if(this.move.x || this.move.y){
-				socket.emit('request:update', player.coords);
+				network.emit('request:update', player.coords);
 			}
 		};
 
@@ -76,11 +73,11 @@ block content
 
 			enemy.render = player.render;
 
-			socket.on('update:' + id, function(data){
+			network.on('update:' + id, function(data){
 				enemy.coords = data;
 			});
 
-			socket.on('remove:' + id, function(){
+			network.on('remove:' + id, function(){
 				var index = enemies.indexOf(enemy);
 
 				enemies.splice(index, 1);
@@ -89,12 +86,12 @@ block content
 			enemies.push(enemy);
 		}
 
-		socket.on('newClient', function(id){
+		network.on('new:client', function(id){
 			createEnemy(id);
-			socket.emit('request:update', player.coords);
+			network.emit('request:update', player.coords);
 		});
 
-		socket.on('request:sync', function(ids){
+		network.on('request:sync', function(ids){
 			ids.forEach(createEnemy);
 		});
 
@@ -145,4 +142,3 @@ block content
 			render(context);
 			requestAnimationFrame(frame);
 		})();
-	//- script(src="/public/build/client-connection.js")

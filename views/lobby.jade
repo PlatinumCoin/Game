@@ -1,6 +1,7 @@
 extends layout
 
 block content
+	h2 Available Games
 	table
 		thead
 			tr
@@ -11,3 +12,14 @@ block content
 				tr
 					td: a(href="game/#{game.hash}")= game.name
 					td= game.players + '/' + game.max
+
+
+	h2 New Game
+	form(action="/newgame", method="GET")
+		label Name
+		input(type="text", name="game-name")
+
+		label Players Count
+		input(type="number", name="game-count")
+
+		input(type="submit", value="Create")
