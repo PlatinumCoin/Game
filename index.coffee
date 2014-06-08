@@ -32,22 +32,31 @@ server.listen ports.sockets
 
 # socket connection options
 io.sockets.on 'connection', (client) ->
+	gameManager = require './src/game-manager'
+
 	client.uuid = uuid.v1()
+	broadcast = (client) -> client.broadcast.to client.game
 
-	client.join 'game'
+	client.on 'request:join', (game) ->
+		throw "game #{game} doesn't exist" if gameManager.exists game
 
-	allEnemies = io.sockets.clients 'game'
-		.filter (socket) -> socket.uuid != client.uuid
-		.map (socket) -> socket.uuid
+		client.game = game
 
-	client.on 'message', (data) ->
-		client.broadcast.to('game').emit "update:#{client.uuid}", data
+		enemies = io.sockets.clients game
+			.map (socket) -> socket.uuid
+
+		client.join game
+		gameManager.addPlayer game
+
+		broadcast(client).emit 'newClient', client.uuid
+		client.emit 'request:sync', enemies
+
+	client.on 'request:update', (data) ->
+		broadcast(client).emit "update:#{client.uuid}", data
 
 	client.on 'disconnect', () ->
-		client.broadcast.to('game').emit "remove:#{client.uuid}"
-
-	client.emit 'sync', allEnemies
-
-	client.broadcast.to('game').emit 'newClient', client.uuid
+		broadcast(client).emit "remove:#{client.uuid}"
+		client.leave client.game
+		gameManager.removePlayer game
 
 	console.log 'client %s connected', client.uuid
