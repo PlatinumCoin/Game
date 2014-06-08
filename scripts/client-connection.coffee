@@ -9,8 +9,3 @@ socket.on 'tick', () ->
 
 socket.on 'clientsListUpdate', () ->
 	console.log arguments
-
-bumpButton = document.getElementById 'bump'
-
-bumpButton.addEventListener 'click', () ->
-	socket.emit 'message', 'bump'
