@@ -18,7 +18,7 @@ gulp.task 'coffee-lint', () ->
 gulp.task 'coffee-build', () ->
 	gulp.src source
 		.pipe coffee(sourceMap: true)
-		.pipe gulp.dest destination
+		.pipe gulp.dest(destination)
 
 gulp.task 'coffee', ['coffee-lint', 'coffee-build']
 

@@ -43,12 +43,16 @@ io.sockets.on 'connection', (client) ->
 	client.emit 'connected', id: client.uuid
 
 	client.on 'message', (message) ->
-		console.log message
 		client.broadcast.emit 'tick', { message, id: client.uuid }
 
 	client.on 'connectTo', (gameId) ->
-		client.join 'gameId'
+		client.join gameId
 		console.log "client join #{ gameId }"
 
+		clients = io.sockets.clients(gameId).map (client) -> client.uuid
+
+		console.log clients
+		io.sockets.in(gameId).emit 'clientsListUpdate', clients
+
 	client.on 'disconnect', () ->
-		console.log client.uuid
+		console.log "#{client.uuid} was disconnected"
