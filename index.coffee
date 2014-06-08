@@ -34,19 +34,20 @@ server.listen ports.sockets
 io.sockets.on 'connection', (client) ->
 	client.uuid = uuid.v1()
 
-	client.emit 'connected', id: client.uuid
+	client.join 'game'
 
-	client.on 'message', (message) ->
-		client.broadcast.emit 'tick', { message, id: client.uuid }
+	allEnemies = io.sockets.clients 'game'
+		.filter (socket) -> socket.uuid != client.uuid
+		.map (socket) -> socket.uuid
 
-	client.on 'connectTo', (gameId) ->
-		client.join gameId
-		console.log "client join #{ gameId }"
-
-		clients = io.sockets.clients(gameId).map (client) -> client.uuid
-
-		console.log clients
-		io.sockets.in(gameId).emit 'clientsListUpdate', clients
+	client.on 'message', (data) ->
+		client.broadcast.to('game').emit "update:#{client.uuid}", data
 
 	client.on 'disconnect', () ->
-		console.log "#{client.uuid} was disconnected"
+		client.broadcast.to('game').emit "remove:#{client.uuid}"
+
+	client.emit 'sync', allEnemies
+
+	client.broadcast.to('game').emit 'newClient', client.uuid
+
+	console.log 'client %s connected', client.uuid

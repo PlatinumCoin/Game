@@ -2,8 +2,146 @@ extends layout
 
 block content
 	h1= title
-	button(id="bump") Bump Me
+	canvas(id="viewport", width="640", height="480", style="border: 1px dashed;")
 
-	script!= 'GAME_ID = \'' + title + '\';'
 	script(src="/public/bower_components/socket.io-client/dist/socket.io.js")
-	script(src="/public/build/client-connection.js")
+	script!= 'GAME_ID = \'' + title + '\';'
+	script.
+		var socket = io.connect('http://localhost:8080');
+		console.log(socket);
+
+		var player = {
+				coords: { x: 0, y: 0 },
+				color: '#ff0000',
+				move: { x: 0, y: 0 }
+			};
+
+		player.update = function(){
+			this.coords.x += 5 * this.move.x;
+			this.coords.y += 5 * this.move.y;
+
+			if(this.move.x || this.move.y){
+				socket.emit('message', player.coords);
+			}
+		};
+
+		player.render = function(ctx){
+			ctx.save();
+			ctx.fillStyle = this.color;
+			ctx.fillRect(this.coords.x, this.coords.y, 40, 40);
+			ctx.restore();
+			ctx.fillRect(this.coords.x + 10, this.coords.y + 10, 20, 20);
+		};
+
+		function updateKey(player, key, reset){
+			var forward = reset ? 0 : 1,
+				backward = reset ? 0 : -1;
+
+			switch(key){
+				// left
+				case 37:
+					player.move.x = backward;
+					break;
+
+				// right
+				case 39:
+					player.move.x = forward;
+					break;
+
+				// up
+				case 38:
+					player.move.y = backward;
+					break;
+
+				// down
+				case 40:
+					player.move.y = forward;
+					break;
+			}
+		}
+
+		document.addEventListener('keydown', function(event){
+			updateKey(player, event.keyCode);
+		});
+
+		document.addEventListener('keyup', function(event){
+			updateKey(player, event.keyCode, true);
+		});
+
+		var enemies = [];
+
+		function createEnemy(id){
+			var enemy = { coords: { x: 0, y: 0 }, color: '#00ff00' };
+
+			enemy.render = player.render;
+
+			socket.on('update:' + id, function(data){
+				enemy.coords = data;
+			});
+
+			socket.on('remove:' + id, function(){
+				var index = enemies.indexOf(enemy);
+
+				enemies.splice(index, 1);
+			});
+
+			enemies.push(enemy);
+		}
+
+		socket.on('newClient', function(id){
+			createEnemy(id);
+			socket.emit('message', player.coords);
+		});
+
+		socket.on('sync', function(ids){
+			ids.forEach(createEnemy);
+		});
+
+		var canvas = document.getElementById('viewport'),
+			context = canvas.getContext('2d');
+
+		var width = canvas.width, height = canvas.height;
+
+		var timestamp = (function(){
+			if(window.performance && window.performance.now){
+				return window.performance.now.bind(window.performance);
+			}
+
+			return Date.now.bind(Date);
+		})();
+
+		var delta = 0,
+			now,
+			last = timestamp(),
+			fps = 60,
+			step = 1 / fps;
+
+		function update(){
+			player.update();
+		}
+
+		function render(context){
+			context.clearRect(0, 0, width, height);
+
+			for(var i = 0, l = enemies.length; i < l; i++){
+				enemies[i].render(context);
+			}
+
+			player.render(context);
+		}
+
+		(function frame(){
+			now = timestamp();
+			delta += Math.min(1, (now - last) / 1000);
+
+			while(delta > step){
+				delta -= step;
+				update();
+			}
+
+			last = now;
+
+			render(context);
+			requestAnimationFrame(frame);
+		})();
+	//- script(src="/public/build/client-connection.js")
