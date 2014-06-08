@@ -1,4 +1,4 @@
-socket = io.connect 'http://localhost:1338'
+socket = io.connect 'http://localhost:8080'
 
 socket.on 'connected', (params) ->
 	# Params :: Object { id }
