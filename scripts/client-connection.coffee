@@ -1,11 +1,4 @@
 socket = io.connect 'http://localhost:8080'
+window.network = socket
 
-socket.on 'connected', (params) ->
-	# Params :: Object { id }
-	socket.emit 'connectTo', GAME_ID
-
-socket.on 'tick', () ->
-	console.log arguments
-
-socket.on 'clientsListUpdate', () ->
-	console.log arguments
+socket.emit 'request:join', GAME_ID
