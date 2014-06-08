@@ -23,10 +23,12 @@ exports.newGame = (name, maxPlayersCount) ->
 			max: maxPlayersCount
 
 exports.addPlayer = (hash) ->
-	games[hash].players += 1
+	if exports.exists hash
+		games[hash].players += 1
 
 exports.removePlayer = (hash) ->
-	games[hash].players -= 1
+	if exports.exists hash
+		games[hash].players -= 1
 
 exports.gamesList = () ->
 	Object.keys games
