@@ -3,6 +3,7 @@ socket = require 'socket.io'
 ports = require './ports'
 uuid = require 'node-uuid'
 http = require 'http'
+games = require './src/game-manager'
 
 # create servers instances
 app = express()
@@ -21,10 +22,16 @@ homeCtrl = require './controllers/home'
 lobbyCtrl = require './controllers/lobby'
 gameCtrl = require './controllers/game'
 
-# getters
+# get
 app.get '/', homeCtrl.index
 app.get '/lobby', lobbyCtrl.index
 app.get '/game/:gameId?', gameCtrl.index
+
+# post
+app.get '/newgame', (request, response) ->
+	games.newGame request.query['game-name'], request.query['game-count']
+
+	response.redirect 301, '/lobby'
 
 # servers running
 app.listen ports.express, () -> console.log 'info: server started'
@@ -32,13 +39,11 @@ server.listen ports.sockets
 
 # socket connection options
 io.sockets.on 'connection', (client) ->
-	gameManager = require './src/game-manager'
-
 	client.uuid = uuid.v1()
 	broadcast = (client) -> client.broadcast.to client.game
 
 	client.on 'request:join', (game) ->
-		throw "game #{game} doesn't exist" if gameManager.exists game
+		throw new Error "game #{game} doesn't exist" if games.exists game
 
 		client.game = game
 
@@ -46,9 +51,9 @@ io.sockets.on 'connection', (client) ->
 			.map (socket) -> socket.uuid
 
 		client.join game
-		gameManager.addPlayer game
+		games.addPlayer game
 
-		broadcast(client).emit 'newClient', client.uuid
+		broadcast(client).emit 'new:client', client.uuid
 		client.emit 'request:sync', enemies
 
 	client.on 'request:update', (data) ->
@@ -57,6 +62,6 @@ io.sockets.on 'connection', (client) ->
 	client.on 'disconnect', () ->
 		broadcast(client).emit "remove:#{client.uuid}"
 		client.leave client.game
-		gameManager.removePlayer game
+		games.removePlayer client.game
 
 	console.log 'client %s connected', client.uuid
