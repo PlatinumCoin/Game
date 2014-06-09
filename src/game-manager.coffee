@@ -11,16 +11,14 @@ games =
 		players: 0
 		max: 15
 
-
 exports.newGame = (name, maxPlayersCount) ->
 	# TODO: get hash
-	# TODO: use exists()
-	if name not in games
+	if not exports.exists name
 		games[name] =
-			name: name,
-			hash: name,
-			players: 0,
-			max: maxPlayersCount
+			name: name
+			hash: name
+			players: 0
+			max: +maxPlayersCount
 
 exports.addPlayer = (hash) ->
 	if exports.exists hash
@@ -35,4 +33,4 @@ exports.gamesList = () ->
 		.map (key) -> games[key]
 
 exports.exists = (hash) ->
-	hash in games
+	games.hasOwnProperty hash

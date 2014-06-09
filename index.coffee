@@ -29,6 +29,7 @@ app.get '/game/:gameId?', gameCtrl.index
 
 # post
 app.get '/newgame', (request, response) ->
+	console.log request.query
 	games.newGame request.query['game-name'], request.query['game-count']
 
 	response.redirect 301, '/lobby'
@@ -43,7 +44,7 @@ io.sockets.on 'connection', (client) ->
 	broadcast = (client) -> client.broadcast.to client.game
 
 	client.on 'request:join', (game) ->
-		throw new Error "game #{game} doesn't exist" if games.exists game
+		throw new Error "game #{game} doesn't exist" if not games.exists game
 
 		client.game = game
 
