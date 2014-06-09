@@ -17,6 +17,6 @@ app.use '/public', express.static 'public'
 routes.setup app
 
 # servers running
-app.listen ports.express, () -> console.log 'info: server started'
+app.listen ports.express
 sockets.server.listen ports.sockets
 network.connection sockets.io
