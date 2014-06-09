@@ -2,4 +2,11 @@ extends layout
 
 block content
 	h1= title
-	a(href="/lobby") Go to Lobby
+
+	if user
+		h2= 'Hello, ' + user.name
+		img(src=user.image)
+
+		a(href="/lobby") Go to Lobby
+	else
+		a(href="/auth/twitter") Sign in with Twitter
