@@ -12,11 +12,13 @@ games =
 		max: 15
 
 exports.newGame = (name, maxPlayersCount) ->
-	# TODO: get hash
-	if not exports.exists name
-		games[name] =
+	slugify = require 'string-slugify'
+	hash = slugify name
+
+	if not exports.exists hash
+		games[hash] =
 			name: name
-			hash: name
+			hash: hash
 			players: 0
 			max: +maxPlayersCount
 
