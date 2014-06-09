@@ -11,15 +11,15 @@ exports.createServer = (hostServer) ->
 
 exports.connection = (io) ->
 	io.sockets.on 'connection', (client) ->
-		client.uuid = uuid.v1()
+		client.id = uuid.v1()
 
 		broadcast = (client) ->
 			client.broadcast.to client.game
 
 		enemies = (game, clientId) ->
 			io.sockets.clients game
-				.map (client) -> client.uuid
-				.filter (uuid) -> uuid isnt clientId
+				.map (client) -> client.id
+				.filter (id) -> id isnt clientId
 
 		client.on 'request:join', (game) ->
 			throw new Error "game #{game} doesn't exist" if not games.exists game
@@ -29,15 +29,15 @@ exports.connection = (io) ->
 			client.join game
 			games.addPlayer game
 
-			broadcast(client).emit 'new:client', client.uuid
-			client.emit 'request:sync', enemies(game, client.uuid)
+			broadcast(client).emit 'new:client', client.id
+			client.emit 'request:sync', enemies(game, client.id)
 
 		client.on 'request:update', (data) ->
-			broadcast(client).emit "update:#{client.uuid}", data
+			broadcast(client).emit "update:#{client.id}", data
 
 		client.on 'disconnect', () ->
-			broadcast(client).emit "remove:#{client.uuid}"
+			broadcast(client).emit "remove:#{client.id}"
 			client.leave client.game
 			games.removePlayer client.game
 
-		console.log 'client %s connected', client.uuid
+		console.log 'client %s connected', client.id
