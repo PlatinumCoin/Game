@@ -24,7 +24,7 @@ mongoose.model 'User', UserSchema
 
 User = mongoose.model 'User'
 
-callbackURL = "http://localhost:#{ports.express}/auth/twitter/callback"
+callbackURL = "http://192.168.0.183:#{ports.express}/auth/twitter/callback"
 
 passport.use new TwitterStrategy { consumerKey, consumerSecret, callbackURL },
 	(token, tokenSecret, profile, done) ->
@@ -49,7 +49,6 @@ passport.serializeUser (user, done) ->
 passport.deserializeUser (uid, done) ->
 	User.findOne { uid }, (error, user) ->
 		done error, user
-
 
 # servers instances
 app = express()

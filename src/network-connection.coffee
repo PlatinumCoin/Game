@@ -11,14 +11,14 @@ exports.createServer = (hostServer) ->
 
 exports.connection = (io) ->
 	io.sockets.on 'connection', (client) ->
-		client.id = uuid.v1()
+		client.uuid = uuid.v1()
 
 		broadcast = (client) ->
 			client.broadcast.to client.game
 
 		enemies = (game, clientId) ->
 			io.sockets.clients game
-				.map (client) -> client.id
+				.map (client) -> client.uuid
 				.filter (id) -> id isnt clientId
 
 		client.on 'request:join', (game) ->
@@ -29,15 +29,15 @@ exports.connection = (io) ->
 			client.join game
 			games.addPlayer game
 
-			broadcast(client).emit 'new:client', client.id
-			client.emit 'request:sync', enemies(game, client.id)
+			client.emit 'request:sync', enemies(game, client.uuid)
+			broadcast(client).emit 'new:client', client.uuid
 
 		client.on 'request:update', (data) ->
-			broadcast(client).emit "update:#{client.id}", data
+			broadcast(client).emit "update:#{client.uuid}", data
 
 		client.on 'disconnect', () ->
-			broadcast(client).emit "remove:#{client.id}"
+			broadcast(client).emit "remove:#{client.uuid}"
 			client.leave client.game
 			games.removePlayer client.game
 
-		console.log 'client %s connected', client.id
+		console.log 'client %s connected', client.uuid

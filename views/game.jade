@@ -87,11 +87,13 @@ block content
 		}
 
 		network.on('new:client', function(id){
+			console.log('new:client', id);
 			createEnemy(id);
 			network.emit('request:update', player.coords);
 		});
 
 		network.on('request:sync', function(ids){
+			console.log('request:sync', ids);
 			ids.forEach(createEnemy);
 		});
 
