@@ -12,8 +12,7 @@ exports.setup = (app) ->
 	app.get '/game/:gameId?', gameCtrl.index
 
 	# post
-	# TODO: use POST
-	app.get '/newgame', (request, response) ->
-		games.newGame request.query['game-name'], request.query['game-count']
+	app.post '/newgame', (request, response) ->
+		games.newGame request.body['game-name'], request.body['game-count']
 
 		response.redirect 301, '/lobby'

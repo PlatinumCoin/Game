@@ -60,6 +60,7 @@ app.set 'view engine', 'jade'
 
 # express middlewares
 app.use express.compress()
+app.use express.bodyParser()
 app.use express.cookieParser()
 app.use express.session(secret: consumerSecret)
 app.use passport.initialize()
