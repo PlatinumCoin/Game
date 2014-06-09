@@ -1,14 +1,11 @@
 express = require 'express'
-socket = require 'socket.io'
-ports = require './ports'
-uuid = require 'node-uuid'
-http = require 'http'
+network = require './src/network-connection'
 games = require './src/game-manager'
+ports = require './ports'
 
 # create servers instances
 app = express()
-server = http.createServer app
-io = socket.listen server
+sockets = network.createServer app
 
 # express configuration
 app.set 'view engine', 'jade'
@@ -36,33 +33,5 @@ app.get '/newgame', (request, response) ->
 
 # servers running
 app.listen ports.express, () -> console.log 'info: server started'
-server.listen ports.sockets
-
-# socket connection options
-io.sockets.on 'connection', (client) ->
-	client.uuid = uuid.v1()
-	broadcast = (client) -> client.broadcast.to client.game
-
-	client.on 'request:join', (game) ->
-		throw new Error "game #{game} doesn't exist" if not games.exists game
-
-		client.game = game
-
-		enemies = io.sockets.clients game
-			.map (socket) -> socket.uuid
-
-		client.join game
-		games.addPlayer game
-
-		broadcast(client).emit 'new:client', client.uuid
-		client.emit 'request:sync', enemies
-
-	client.on 'request:update', (data) ->
-		broadcast(client).emit "update:#{client.uuid}", data
-
-	client.on 'disconnect', () ->
-		broadcast(client).emit "remove:#{client.uuid}"
-		client.leave client.game
-		games.removePlayer client.game
-
-	console.log 'client %s connected', client.uuid
+sockets.server.listen ports.sockets
+network.connection sockets.io
