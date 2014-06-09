@@ -3,7 +3,7 @@ network = require './src/network-connection'
 routes = require './src/routes-setup'
 ports = require './ports'
 
-# create servers instances
+# servers instances
 app = express()
 sockets = network.createServer app
 
@@ -19,4 +19,6 @@ routes.setup app
 # servers running
 app.listen ports.express
 sockets.server.listen ports.sockets
+
+# socket.io connection
 network.connection sockets.io
