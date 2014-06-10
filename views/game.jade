@@ -2,6 +2,11 @@ extends layout
 
 block content
 	h1= title
+
+	if user
+		h2= 'Hello, ' + user.name
+		img(src=user.image)
+
 	canvas(id="viewport", width="640", height="480", style="border: 1px dashed;")
 
 	script(src="/public/bower_components/socket.io-client/dist/socket.io.js")

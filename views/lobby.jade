@@ -1,6 +1,10 @@
 extends layout
 
 block content
+	if user
+		h2= 'Hello, ' + user.name
+		img(src=user.image)
+
 	h2 Available Games
 	table
 		thead
