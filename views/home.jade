@@ -1,12 +1,16 @@
 extends layout
 
+block page-styles
+	link(rel="stylesheet", href="/public/styles/home.css")
+
 block content
-	h1= title
+	main
+		h1= title
 
-	if user
-		h2= 'Hello, ' + user.name
-		img(src=user.image)
-
-		a(href="/lobby") Go to Lobby
-	else
-		a(href="/auth/twitter") Sign in with Twitter
+		if user
+			//- h2= 'Hello, ' + user.name
+			div(class="box")
+				img(src=user.image, width="48", height="48")
+				a(href="/lobby") Go to Lobby
+		else
+			a(class="sign-in", href="/auth/twitter") Sign in with Twitter
