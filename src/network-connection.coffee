@@ -22,7 +22,8 @@ exports.connection = (io) ->
 				.filter (id) -> id isnt clientId
 
 		client.on 'request:join', (game) ->
-			throw new Error "game #{game} doesn't exist" if not games.exists game
+			if not games.exists game
+				throw new Error "game #{game} doesn't exist"
 
 			client.game = game
 

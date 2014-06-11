@@ -18,6 +18,10 @@ UserSchema = new Schema
 	created:
 		type: Date
 		default: Date.now
+	metrics:
+		games: Number
+		kills: Number
+		deaths: Number
 
 mongoose.connect 'mongodb://localhost/hollow-point'
 mongoose.model 'User', UserSchema
@@ -28,13 +32,13 @@ callbackURL = "http://192.168.240.6:#{ports.express}/auth/twitter/callback"
 
 passport.use new TwitterStrategy { consumerKey, consumerSecret, callbackURL },
 	(token, tokenSecret, profile, done) ->
-		User.findOne {uid: profile.id}, (error, user) ->
+		User.findOne { uid: profile.id }, (error, user) ->
 			if user
 				done null, user
 			else
 				user = new User
 
-				user.provider = "twitter"
+				user.provider = 'twitter'
 				user.uid = profile.id
 				user.name = profile.displayName
 				user.image = profile._json.profile_image_url
@@ -47,8 +51,7 @@ passport.serializeUser (user, done) ->
 	done null, user.uid
 
 passport.deserializeUser (uid, done) ->
-	User.findOne { uid }, (error, user) ->
-		done error, user
+	User.findOne { uid }, done
 
 # servers instances
 app = express()
