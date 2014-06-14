@@ -19,9 +19,15 @@ UserSchema = new Schema
 		type: Date
 		default: Date.now
 	metrics:
-		games: Number
-		kills: Number
-		deaths: Number
+		games:
+			type: Number
+			default: 0
+		kills:
+			type: Number
+			default: 0
+		deaths:
+			type: Number
+			default: 0
 
 mongoose.connect 'mongodb://localhost/hollow-point'
 mongoose.model 'User', UserSchema
