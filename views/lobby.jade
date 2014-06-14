@@ -1,29 +1,24 @@
 extends layout
 
+block page-styles
+	link(rel="stylesheet", href="/public/styles/lobby.css")
+
 block content
-	if user
-		h2= 'Hello, ' + user.name
-		img(src=user.image)
+	main
+		if user
+			h2= 'Hello, ' + user.name
+			img(src=user.image)
 
-	h2 Available Games
-	table
-		thead
-			tr
-				th Name
-				th Players
-		tbody
-			for game in games
+		h2 Available Games
+		table
+			thead
 				tr
-					td: a(href="game/#{game.hash}")= game.name
-					td= game.players + '/' + game.max
+					th Name
+					th Players
+			tbody
+				for game in games
+					tr
+						td: a(href="game/#{game.hash}")= game.name
+						td= game.players + '/' + game.max
 
-
-	h2 New Game
-	form(action="/newgame", method="POST")
-		label Name
-		input(type="text", name="game-name")
-
-		label Players Count
-		input(type="number", name="game-count")
-
-		input(type="submit", value="Create")
+		a(href="/newgame", class="new-game") New game
