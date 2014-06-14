@@ -21,6 +21,8 @@ exports.newGame = (name, maxPlayersCount) ->
 			hash: hash
 			players: 0
 			max: +maxPlayersCount
+	else
+		games[hash]
 
 exports.addPlayer = (hash) ->
 	if exports.exists hash
